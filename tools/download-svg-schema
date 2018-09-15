@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+TOOLS=`dirname $0`
+ROOT=`realpath $TOOLS/..`
+TMPFILE="$TOOLS/SVG.orig.xsd"
+XSD="$TOOLS/SVG.xsd"
+
+set -x
+wget -O "$TMPFILE" https://www.w3.org/TR/2002/WD-SVG11-20020108/SVG.xsd
+xmllint "$TMPFILE" > "$XSD"
+# rm "$TMPFILE"
+
+# node "$TOOLS/convert-svg-schema.js"
