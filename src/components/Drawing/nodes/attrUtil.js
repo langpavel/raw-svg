@@ -8,9 +8,8 @@ export const getReactAttrName: (attr: string) => string = attr =>
 export const domToReactProps: (attrs?: { [name: string]: mixed }) => {
   [name: string]: mixed,
 } = attrs => {
-  if (!attrs) return {};
-
-  const result = Object.create(null);
+  const result = {};
+  if (!attrs) return result;
   for (const [key, value] of Object.entries(attrs)) {
     result[getReactAttrName(key)] = value;
   }
