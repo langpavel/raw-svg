@@ -4,6 +4,9 @@ export type SvgAttributes = {
   id?: string,
   class?: string,
   className?: string,
+  xlinkhref?: string,
+  'xlink:href'?: string,
+  xlinkHref?: string,
   [attr: string]: mixed,
 };
 

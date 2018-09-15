@@ -6,9 +6,11 @@
 }
 
 .hidden-markup {
-  font-size: 33%;
+  // display: inline-block;
+  // font-size: 75%;
   vertical-align: top;
   opacity: 0.5;
+  // max-width: 2ex;
 }
 
 .hidden-markup.bottom {

@@ -1,9 +1,22 @@
 .SvgNodeAttribute-id {
   color: #c00;
+  background-color: #fee;
+}
+
+.SvgNodeAttribute-classes {
+  background-color: #ffe;
 }
 
 .SvgNodeAttribute-class {
-  color: #080;
+  color: #060;
+  background-color: #efe;
+}
+
+.SvgNodeAttribute-xlink-href {
+  color: #008;
+  background-color: #eef;
+  text-decoration: underline solid #008;
+  cursor: pointer;
 }
 
 // .SvgNodeAttribute-id::before { content: '#'; }
