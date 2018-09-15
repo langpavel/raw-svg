@@ -1,18 +1,22 @@
 // @flow
 
 import * as React from 'react';
-import './Drawing.css';
+import SvgNode, { type SvgNodeProps } from './nodes/SvgNode';
 
 export type RootNode = {||};
 
 export type DrawingProps = {|
   id: string,
   name: string,
-  root: RootNode,
+  root: SvgNodeProps,
 |};
 
 export default class Drawing extends React.Component<DrawingProps> {
   render() {
-    return <div>DRAWING</div>;
+    return (
+      <div>
+        <SvgNode {...this.props.root} />
+      </div>
+    );
   }
 }

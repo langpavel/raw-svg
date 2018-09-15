@@ -25,7 +25,7 @@ const js = xmljs.xml2js(xsd, {
 });
 
 console.log(`Formatting…`);
-const json = JSON.stringify(js, null, 2);
+const json = JSON.stringify(js);
 const pretty = prettier.format(json, {
   parser: 'json',
 });
