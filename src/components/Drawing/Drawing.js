@@ -1,14 +1,15 @@
 // @flow
 
 import * as React from 'react';
-import SvgNode, { type SvgNodeProps } from './nodes/SvgNode';
+import SvgNode from './nodes/SvgNode';
+import { type SvgElement } from '../../lib/svg/SvgElement';
 
 export type RootNode = {||};
 
 export type DrawingProps = {|
   id: string,
   name: string,
-  root: SvgNodeProps,
+  root: SvgElement,
 |};
 
 export default class Drawing extends React.Component<DrawingProps> {

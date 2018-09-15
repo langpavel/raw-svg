@@ -1,19 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import { domToReactProps } from './attrUtil';
+import { domToReactProps } from '../../../lib/svg/attrUtil';
+import { type SvgElement } from '../../../lib/svg/SvgElement';
 
-export type SvgNodeProps = {
-  type: 'comment' | 'text' | 'element',
-  text?: string,
-  name?: string,
-  elements?: Array<SvgNodeProps>,
-  attributes?: { [attr: string]: mixed },
-};
-
-class SvgNode extends React.Component<SvgNodeProps> {
+class SvgNode extends React.Component<SvgElement> {
   render() {
-    const props: SvgNodeProps = this.props;
+    const props: SvgElement = this.props;
     switch (props.type) {
       case 'comment':
         return null;
@@ -25,7 +18,7 @@ class SvgNode extends React.Component<SvgNodeProps> {
         return (
           <Component {...reactProps}>
             {props.elements &&
-              props.elements.map((el: SvgNodeProps) => <SvgNode {...el} />)}
+              props.elements.map((el: SvgElement) => <SvgNode {...el} />)}
           </Component>
         );
       default:
