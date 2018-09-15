@@ -1,0 +1,58 @@
+div.SvgTreeNode {
+  padding-left: 1ex;
+}
+
+.SvgTreeNode-tag-opening {
+  padding-left: 4ex;
+  text-indent: -4ex;
+}
+
+.SvgTreeNode-name {
+  font-weight: bold;
+}
+
+.SvgTreeNode-nodes {
+  margin-left: 1ex;
+  border-left: 1px #ccc dotted;
+  position: relative;
+}
+
+.SvgTreeNode-add {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.SvgTreeNode-expander {
+  padding: 0 0.5ex;
+  cursor: default;
+  color: #00f;
+  font-weight: bold;
+}
+
+.SvgTreeNode-expander::before {
+  content: '·';
+}
+
+.SvgTreeNode-expander-expand,
+.SvgTreeNode-expander-collapse {
+  background-color: #ccf;
+  // border: 0px #99f solid;
+  border-radius: 100%;
+}
+
+.SvgTreeNode-expander-expand {
+  cursor: s-resize;
+}
+
+.SvgTreeNode-expander-expand::before {
+  content: '+';
+}
+
+.SvgTreeNode-expander-collapse {
+  cursor: n-resize;
+}
+
+.SvgTreeNode-expander-collapse::before {
+  content: '-';
+}

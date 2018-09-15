@@ -1,0 +1,9 @@
+.SvgNodeAttribute-id {
+  color: #c00;
+}
+
+.SvgNodeAttribute-class {
+  color: #080;
+}
+
+// .SvgNodeAttribute-id::before { content: '#'; }

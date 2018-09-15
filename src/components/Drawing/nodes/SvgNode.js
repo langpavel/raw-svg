@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { domToReactProps } from '../../../lib/svg/attrUtil';
 import { type SvgElement } from '../../../lib/svg/SvgElement';
+import { getIdForObject } from '../../../lib/getIdForObject';
 
 class SvgNode extends React.Component<SvgElement> {
   render() {
@@ -18,7 +19,9 @@ class SvgNode extends React.Component<SvgElement> {
         return (
           <Component {...reactProps}>
             {props.elements &&
-              props.elements.map((el: SvgElement) => <SvgNode {...el} />)}
+              props.elements.map((el: SvgElement) => (
+                <SvgNode key={getIdForObject(el)} {...el} />
+              ))}
           </Component>
         );
       default:

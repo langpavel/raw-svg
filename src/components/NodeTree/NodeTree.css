@@ -1,0 +1,20 @@
+.NodeTree {
+  font-family: monospace;
+  font-size: small;
+  margin: 0;
+  padding: 0;
+}
+
+.hidden-markup {
+  font-size: 33%;
+  vertical-align: top;
+  opacity: 0.5;
+}
+
+.hidden-markup.bottom {
+  vertical-align: bottom;
+}
+
+.hidden-markup.middle {
+  vertical-align: middle;
+}

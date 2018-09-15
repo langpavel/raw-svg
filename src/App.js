@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from './components/Header/Header';
 import Drawing from './components/Drawing/Drawing';
+import NodeTree from './components/NodeTree/NodeTree';
 import './App.css';
 
 import sample from './samples/react-riot-can.json';
@@ -11,6 +12,7 @@ class App extends Component {
       <div className="App">
         <Header />
         <Drawing root={sample.elements[0]} />
+        <NodeTree root={sample.elements[0]} />
       </div>
     );
   }

@@ -249,6 +249,7 @@
             "id": "Landing-Page---Top-part,-different-color-scheme",
             "stroke": "none",
             "stroke-width": "1",
+            "class": "only-cls",
             "fill": "none",
             "fill-rule": "evenodd"
           },
@@ -258,7 +259,8 @@
               "name": "g",
               "attributes": {
                 "id": "Landing---White-top",
-                "transform": "translate(-28.000000, -1187.000000)"
+                "transform": "translate(-28.000000, -1187.000000)",
+                "class": "first-cls  second"
               },
               "elements": [
                 {
