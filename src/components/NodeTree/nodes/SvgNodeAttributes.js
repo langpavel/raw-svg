@@ -66,7 +66,7 @@ class SvgNodeAttributes extends React.Component<SvgNodeAttributesProps> {
           <React.Fragment key={key}>
             {' '}
             <span>
-              <span>{key}</span>=<span>"{val.toString().substr(0, 100)}"</span>
+              <span>{key}</span>=<span>"{val.toString()}"</span>
             </span>
           </React.Fragment>
         ))}
