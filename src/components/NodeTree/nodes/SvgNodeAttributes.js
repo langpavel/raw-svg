@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import { type SvgAttributes } from '../../../lib/svg/SvgElement';
-import { parseSVG, makeAbsolute } from 'svg-path-parser';
+// import { parseSVG, makeAbsolute } from 'svg-path-parser';
 
 import './SvgNodeAttribute.css';
 
@@ -22,7 +22,7 @@ const formatValue = (val, key, elementName) => {
   }
 
   if (key === 'd') {
-    console.log('path', parseSVG(str), makeAbsolute(parseSVG(str)));
+    // console.log('path', parseSVG(str), makeAbsolute(parseSVG(str)));
   }
 
   return str;

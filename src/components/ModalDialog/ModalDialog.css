@@ -1,0 +1,75 @@
+.ModalDialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: block;
+  opacity: 1;
+  transition: opacity 0.4s;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.ModalDialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  opacity: 0.6;
+  background-color: #777;
+}
+
+.ModalDialog-dialog {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin: 20px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 #555;
+  max-width: 678px;
+  width: 95%;
+  margin-top: 200px;
+}
+
+.ModalDialog-header {
+  border-bottom: 1px solid #ccc;
+  position: relative;
+  padding: 20px 40px 20px 20px;
+}
+
+.ModalDialog-title {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 2.15;
+  color: $dark-slate-blue;
+  margin: 0;
+}
+
+.ModalDialog-modalClose {
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 33px;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  right: 20px;
+}
+
+.ModalDialog-modalClose span {
+  display: block;
+  position: absolute;
+  width: 13px;
+  height: 2px;
+  background-color: $steel;
+  transition: transform 0.2s;
+}
+
+.ModalDialog-body {
+  padding: 15px 20px;
+}
