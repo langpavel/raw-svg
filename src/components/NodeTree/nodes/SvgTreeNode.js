@@ -51,9 +51,10 @@ class SvgTreeNode extends React.Component<SvgTreeNodeProps, SvgTreeNodeState> {
         const selfClosing = !elements || elements.length === 0;
         const onlyElement = elements && elements.length === 1 && elements[0];
         const onlyTextNode = onlyElement && onlyElement.type === 'text';
+        const TagWrapper = expanded && !onlyTextNode ? 'div' : 'span';
         return (
           <Wrapper className="SvgTreeNode">
-            <div className="SvgTreeNode-tag-opening">
+            <TagWrapper className="SvgTreeNode-tag-opening">
               <span
                 className={cx('SvgTreeNode-expander', {
                   'SvgTreeNode-expander-expand': hasElements && !expanded,
@@ -66,29 +67,30 @@ class SvgTreeNode extends React.Component<SvgTreeNodeProps, SvgTreeNodeState> {
               <SvgNodeAttributes attributes={props.attributes || {}} />
               {selfClosing ? ' />' : '>'}
               {onlyTextNode && onlyElement && expanded ? (
-                <React.Fragment>
-                  <SvgTreeNode inline {...onlyElement} />
-                  <span className="hidden-markup bottom">{`</${elName}>`}</span>
-                </React.Fragment>
+                <SvgTreeNode inline {...onlyElement} />
+              ) : !expanded ? (
+                <span className="SvgTreeNode-collapsed-summary">
+                  {elements && elements.length ? `${elements.length}` : ''}
+                </span>
               ) : (
                 ''
               )}
-            </div>
+            </TagWrapper>
             {onlyTextNode || !expanded ? (
               ''
             ) : (
               <div className="SvgTreeNode-nodes">
-                {props.elements &&
-                  props.elements.map((el: SvgElement) => (
+                {elements &&
+                  elements.map((el: SvgElement) => (
                     <SvgTreeNode key={getIdForObject(el)} {...el} />
                   ))}
                 <div className="SvgTreeNode-add" />
               </div>
             )}
-            {onlyTextNode || selfClosing ? (
+            {selfClosing ? (
               ''
             ) : (
-              <span className="hidden-markup">{`</${elName}>`}</span>
+              <TagWrapper className="SvgTreeNode-tag-closing hidden-markup">{`</${elName}>`}</TagWrapper>
             )}
           </Wrapper>
         );

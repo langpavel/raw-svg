@@ -2,19 +2,32 @@ div.SvgTreeNode {
   padding-left: 1ex;
 }
 
-.SvgTreeNode-tag-opening {
+div.SvgTreeNode-tag-opening {
   padding-left: 4ex;
   text-indent: -4ex;
 }
 
+div.SvgTreeNode-tag-closing {
+  margin-left: 2ex;
+}
+
 .SvgTreeNode-name {
-  font-weight: bold;
+  // font-weight: bold;
+  color: #c46;
 }
 
 .SvgTreeNode-nodes {
   margin-left: 1ex;
   border-left: 1px #ccc dotted;
   position: relative;
+}
+
+.SvgTreeNode-collapsed-summary {
+  background-color: #bbb;
+  padding: 0 1ex;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 1ex;
 }
 
 .SvgTreeNode-add {
@@ -26,33 +39,18 @@ div.SvgTreeNode {
 .SvgTreeNode-expander {
   padding: 0 0.5ex;
   cursor: default;
-  color: #00f;
+  color: #555;
   font-weight: bold;
 }
 
 .SvgTreeNode-expander::before {
-  content: '·';
-}
-
-.SvgTreeNode-expander-expand,
-.SvgTreeNode-expander-collapse {
-  background-color: #ccf;
-  // border: 0px #99f solid;
-  border-radius: 100%;
-}
-
-.SvgTreeNode-expander-expand {
-  cursor: s-resize;
+  content: ' ';
 }
 
 .SvgTreeNode-expander-expand::before {
-  content: '+';
-}
-
-.SvgTreeNode-expander-collapse {
-  cursor: n-resize;
+  content: '▶';
 }
 
 .SvgTreeNode-expander-collapse::before {
-  content: '-';
+  content: '▼';
 }
