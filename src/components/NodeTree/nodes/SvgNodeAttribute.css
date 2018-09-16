@@ -1,18 +1,18 @@
-.SvgNodeAttribute-id {
+.SvgNodeAttribute-id > .value {
   color: #c00;
   background-color: #fee;
 }
 
-.SvgNodeAttribute-classes {
-  background-color: #ffe;
-}
-
-.SvgNodeAttribute-class {
-  color: #060;
+.SvgNodeAttribute-class > .values {
   background-color: #efe;
 }
 
-.SvgNodeAttribute-xlink-href {
+.SvgNodeAttribute-class .value {
+  color: #060;
+  background-color: #bfb;
+}
+
+.SvgNodeAttribute-xlink-href > .value {
   color: #008;
   background-color: #eef;
   text-decoration: underline solid #008;

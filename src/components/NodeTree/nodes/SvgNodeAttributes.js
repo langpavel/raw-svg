@@ -3,6 +3,7 @@
 import * as React from 'react';
 
 import { type SvgAttributes } from '../../../lib/svg/SvgElement';
+import { parseSVG, makeAbsolute } from 'svg-path-parser';
 
 import './SvgNodeAttribute.css';
 
@@ -17,7 +18,13 @@ const formatValue = (val, key, elementName) => {
       `Unexpected type '${typeof val}' of ${elementName}[${key}]:`,
       val,
     );
+    return '';
   }
+
+  if (key === 'd') {
+    console.log('path', parseSVG(str), makeAbsolute(parseSVG(str)));
+  }
+
   return str;
 };
 
@@ -47,7 +54,7 @@ class SvgNodeAttributes extends React.Component<SvgNodeAttributesProps> {
         {id ? (
           <span className="SvgNodeAttribute SvgNodeAttribute-id">
             <span className="hidden-markup bottom">{' id="'}</span>
-            <span className="SvgNodeAttribute-id">{id}</span>
+            <span className="value">{id}</span>
             <span className="hidden-markup">{'"'}</span>
           </span>
         ) : (
@@ -56,7 +63,7 @@ class SvgNodeAttributes extends React.Component<SvgNodeAttributesProps> {
         {xHref ? (
           <span className="SvgNodeAttribute SvgNodeAttribute-xlink-href">
             <span className="hidden-markup bottom">{' xlink:href="'}</span>
-            <span className="SvgNodeAttribute-xlink-href">{xHref}</span>
+            <span className="value">{xHref}</span>
             <span className="hidden-markup">{'"'}</span>
           </span>
         ) : (
@@ -65,10 +72,10 @@ class SvgNodeAttributes extends React.Component<SvgNodeAttributesProps> {
         {clsNames ? (
           <span className="SvgNodeAttribute SvgNodeAttribute-class">
             <span className="hidden-markup bottom">{' class="'}</span>
-            <span className="SvgNodeAttribute-classes">
+            <span className="values">
               {clsNames.map((cname, idx) => (
                 <React.Fragment key={cname}>
-                  <span className="SvgNodeAttribute-class">{cname}</span>
+                  <span className="value">{cname}</span>
                   {idx < clsMaxIdx ? ' ' : ''}
                 </React.Fragment>
               ))}

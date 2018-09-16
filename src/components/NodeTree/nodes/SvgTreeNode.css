@@ -7,6 +7,10 @@ div.SvgTreeNode-tag-opening {
   text-indent: -4ex;
 }
 
+.SvgTreeNode-tag-opening:hover {
+  white-space: normal;
+}
+
 div.SvgTreeNode-tag-closing {
   margin-left: 2ex;
 }
