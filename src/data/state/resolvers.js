@@ -7,7 +7,6 @@ const resolvers = {
       return null;
     },
     openDialog: (_, { name }, { cache }) => {
-      console.log('Cache', cache);
       cache.writeData({
         data: {
           __typename: 'Dialogs',
@@ -20,7 +19,6 @@ const resolvers = {
       return null;
     },
     closeDialog: (_, { name }, { cache }) => {
-      console.log('Cache', cache);
       cache.writeData({
         data: {
           __typename: 'Dialogs',

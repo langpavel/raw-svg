@@ -6,6 +6,7 @@ import { withApollo } from 'react-apollo';
 import { type ApolloClient } from 'apollo-client';
 import ModalDialog from '../ModalDialog/ModalDialog';
 import './OpenFileDialog.css';
+import { DocumentNode } from 'apollo-link';
 
 type OpenFileDialogProps = {
   client: ApolloClient,
@@ -58,11 +59,48 @@ class OpenFileDialog extends React.Component<
     }
   };
 
+  handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { svg } = this.state;
+    if (svg) {
+      console.log('loadDocument', { svg });
+
+      const getAttributes = (node: DocumentNode) => {
+        const result = {};
+        for (let entry of node.attributes) {
+          console.log('entry', entry);
+          result[entry.name] = entry.value;
+        }
+        return result;
+      };
+
+      const getChildNodes = (parent: DocumentNode) => {
+        const result = [];
+        if (parent.childNodes.length === 0) return null;
+        for (let node of parent.childNodes) {
+          result.push({});
+        }
+        return result;
+      };
+
+      const root = {
+        type: 'element',
+        name: svg.documentElement.nodeName,
+        attributes: getAttributes(svg.documentElement),
+        elements: getChildNodes(svg.documentElement),
+      };
+
+      console.log('root', root);
+
+      this.handleClose();
+    }
+  };
+
   render() {
     const { error, svg } = this.state;
     return (
       <ModalDialog title="Open File" onClose={this.handleClose}>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           {svg && svg.documentElement ? (
             <div
               className="OpenDialog-preview"
