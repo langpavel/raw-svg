@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import './Modal.css';
 
-const modalRoot = document.getElementById('modals');
+const modalRoot: HTMLElement = document.getElementById('modals');
 
 export type ModalProps = {
   children: React.Node,
@@ -11,12 +11,7 @@ export type ModalProps = {
 };
 
 class Modal extends React.Component<ModalProps> {
-  portalElement: HTMLElement;
-
-  constructor(props) {
-    super(props);
-    this.portalElement = document.createElement('div');
-  }
+  portalElement: HTMLElement = document.createElement('div');
 
   componentDidMount() {
     modalRoot.appendChild(this.portalElement);

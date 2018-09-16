@@ -1,14 +1,19 @@
 // @flow
 
 import * as React from 'react';
-import './OpenFileDialog.css';
+import gql from 'graphql-tag';
+import { withApollo } from 'react-apollo';
+import { type ApolloClient } from 'apollo-client';
 import ModalDialog from '../ModalDialog/ModalDialog';
+import './OpenFileDialog.css';
 
-type OpenFileDialogProps = {};
+type OpenFileDialogProps = {
+  client: ApolloClient,
+};
 
 type OpenFileDialogState = {
   error: ?Error,
-  svg: any,
+  svg: ?Document,
 };
 
 class OpenFileDialog extends React.Component<
@@ -20,9 +25,20 @@ class OpenFileDialog extends React.Component<
     svg: null,
   };
 
-  handleClose = () => {};
+  closeDialog = name => {
+    return this.props.client.mutate({
+      mutation: gql`
+        mutation closeDialog($name: String) {
+          closeDialog(name: $name) @client
+        }
+      `,
+      variables: { name },
+    });
+  };
 
-  handleChange = e => {
+  handleClose = () => this.closeDialog('openFile');
+
+  handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     try {
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -47,7 +63,7 @@ class OpenFileDialog extends React.Component<
     return (
       <ModalDialog title="Open File" onClose={this.handleClose}>
         <form>
-          {svg ? (
+          {svg && svg.documentElement ? (
             <div
               className="OpenDialog-preview"
               dangerouslySetInnerHTML={{
@@ -78,4 +94,4 @@ class OpenFileDialog extends React.Component<
   }
 }
 
-export default OpenFileDialog;
+export default withApollo(OpenFileDialog);

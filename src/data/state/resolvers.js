@@ -19,6 +19,19 @@ const resolvers = {
       });
       return null;
     },
+    closeDialog: (_, { name }, { cache }) => {
+      console.log('Cache', cache);
+      cache.writeData({
+        data: {
+          __typename: 'Dialogs',
+          dialogs: {
+            __typename: 'Dialog',
+            [name]: false,
+          },
+        },
+      });
+      return null;
+    },
   },
 };
 

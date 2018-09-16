@@ -8,6 +8,7 @@ const defaults = {
   },
   dialogs: {
     __typename: 'Dialogs',
+    openFile: false,
   },
 };
 

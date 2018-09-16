@@ -4,8 +4,10 @@
 
 .OpenDialog-preview svg {
   height: calc(100vh / 2);
+  width: 100%;
   margin-bottom: 1rem;
-  background-color: #ccc;
+  background-color: #fff;
+  border: #ccc 1px solid;
 }
 
 .OpenDialog-buttons {
