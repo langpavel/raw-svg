@@ -7,8 +7,20 @@ div.SvgTreeNode-tag-opening {
   text-indent: -4ex;
 }
 
+.SvgTreeNode-tag-opening {
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 1rem;
+  // max-height: 1rem;
+  // transition: all 1s linear;
+}
+
 .SvgTreeNode-tag-opening:hover {
+  background-color: #ffc;
   white-space: normal;
+  max-height: 10rem;
+  overflow-y: auto;
+  // transition: all 1s linear;
 }
 
 div.SvgTreeNode-tag-closing {
