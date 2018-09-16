@@ -1,0 +1,17 @@
+.OpenDialog-preview {
+  height: calc(100vh / 2);
+}
+
+.OpenDialog-preview svg {
+  height: calc(100vh / 2);
+  margin-bottom: 1rem;
+  background-color: #ccc;
+}
+
+.OpenDialog-buttons {
+  margin-top: 1rem;
+}
+
+.OpenDialog-open {
+  float: right;
+}
