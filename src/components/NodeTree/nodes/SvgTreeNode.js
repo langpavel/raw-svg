@@ -64,7 +64,10 @@ class SvgTreeNode extends React.Component<SvgTreeNodeProps, SvgTreeNodeState> {
               />
               {'<'}
               <span className="SvgTreeNode-name">{elName}</span>
-              <SvgNodeAttributes attributes={props.attributes || {}} />
+              <SvgNodeAttributes
+                elementName={elName}
+                attributes={props.attributes || {}}
+              />
               {selfClosing ? ' />' : '>'}
               {onlyTextNode && onlyElement && expanded ? (
                 <SvgTreeNode inline {...onlyElement} />
