@@ -10,6 +10,7 @@ const defaults = {
     __typename: 'Dialogs',
     openFile: false,
   },
+  currentDocument: null,
 };
 
 export default defaults;

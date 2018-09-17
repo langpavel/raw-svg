@@ -15,6 +15,9 @@ const QUERY_DIALOGS = gql`
     dialogs @client {
       openFile
     }
+    currentDocument @client {
+      documentElement
+    }
   }
 `;
 
@@ -29,11 +32,11 @@ class App extends Component {
               {data && data.dialogs && data.dialogs.openFile ? (
                 <OpenFileDialog />
               ) : null}
+              <Drawing root={sample.elements[0]} />
+              <NodeTree root={sample.elements[0]} />
             </React.Fragment>
           )}
         </Query>
-        <Drawing root={sample.elements[0]} />
-        <NodeTree root={sample.elements[0]} />
       </div>
     );
   }
