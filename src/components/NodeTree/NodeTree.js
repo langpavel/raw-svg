@@ -2,22 +2,24 @@
 
 import * as React from 'react';
 import SvgTreeNode from './nodes/SvgTreeNode';
-import { type SvgElement } from '../../lib/svg/SvgElement';
+import { type SvgNode } from '../../lib/svg/SvgNode';
 import './NodeTree.css';
-
-export type RootNode = {||};
 
 export type NodeTreeProps = {|
   id: string,
-  name: string,
-  root: SvgElement,
+  fileName: string,
+  childNodes: Array<SvgNode>,
 |};
 
 export default class NodeTree extends React.Component<NodeTreeProps> {
   render() {
+    const { childNodes } = this.props;
     return (
       <div className="NodeTree">
-        <SvgTreeNode {...this.props.root} />
+        {childNodes &&
+          childNodes.map((node: SvgNode) => (
+            <SvgTreeNode key={node.id} {...node} />
+          ))}
       </div>
     );
   }

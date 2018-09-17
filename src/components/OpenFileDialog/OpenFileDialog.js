@@ -15,8 +15,8 @@ type OpenFileDialogProps = {
 type OpenFileDialogState = {
   error: ?Error,
   svgDocument: ?Document,
-  fileName: string,
-  lastModified: number,
+  fileName: ?string,
+  lastModified: ?number,
 };
 
 class OpenFileDialog extends React.Component<

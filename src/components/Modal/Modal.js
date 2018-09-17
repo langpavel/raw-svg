@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import './Modal.css';
 
+// $FlowFixMe
 const modalRoot: HTMLElement = document.getElementById('modals');
 
 export type ModalProps = {

@@ -2,8 +2,9 @@
 
 import { genSerial } from '../getIdForObject';
 import { getReactAttrName } from './attrUtil';
+import { type SvgNode, type SvgAttributes } from './SvgNode';
 
-function getAttributes(node: DocumentNode) {
+function getAttributes(node: Element): SvgAttributes {
   const result = {};
   for (let entry of node.attributes) {
     result[getReactAttrName(entry.name)] = entry.value;
@@ -11,7 +12,7 @@ function getAttributes(node: DocumentNode) {
   return result;
 }
 
-function processNode(node: DocumentNode) {
+function processNode(node: Node): ?SvgNode {
   // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#Node_type_constants
   switch (node.nodeType) {
     case 1: {
@@ -20,6 +21,7 @@ function processNode(node: DocumentNode) {
         __typename: 'SvgElement',
         id: genSerial(),
         name: node.nodeName,
+        // $FlowFixMe
         attributes: getAttributes(node),
         childNodes: getChildNodes(node),
       };
@@ -35,7 +37,7 @@ function processNode(node: DocumentNode) {
     case 4: {
       // CDATA_SECTION_NODE
       return {
-        __typename: 'SvgCdata',
+        __typename: 'SvgCData',
         id: genSerial(),
         cdata: node.nodeValue,
       };
@@ -74,7 +76,7 @@ function processNode(node: DocumentNode) {
   }
 }
 
-function getChildNodes(parent: DocumentNode) {
+function getChildNodes(parent: Node): Array<SvgNode> | null {
   const result = [];
   if (parent.childNodes.length === 0) return null;
   for (let node of parent.childNodes) {
@@ -85,7 +87,16 @@ function getChildNodes(parent: DocumentNode) {
   return result;
 }
 
-export const convertSvgDom = ({ svgDocument, ...rest }) => {
-  const document = processNode(svgDocument);
-  return Object.assign(document, rest);
+type ConvertSvgDomOptions = {
+  svgDocument: Node,
+  [name: string]: mixed,
 };
+
+export function convertSvgDom({
+  svgDocument,
+  ...rest
+}: ConvertSvgDomOptions): SvgNode | null {
+  const document = processNode(svgDocument);
+  if (!document) return null;
+  return Object.assign(document, rest);
+}

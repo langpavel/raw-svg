@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { type SvgAttributes } from '../../../lib/svg/SvgElement';
+import { type SvgAttributes } from '../../../lib/svg/SvgNode';
 // import { parseSVG, makeAbsolute } from 'svg-path-parser';
 
 import './SvgNodeAttribute.css';
@@ -36,18 +36,8 @@ type SvgNodeAttributesProps = {
 class SvgNodeAttributes extends React.Component<SvgNodeAttributesProps> {
   render() {
     const { elementName, attributes } = this.props;
-    const {
-      id,
-      class: cls,
-      className,
-      xlinkhref,
-      'xlink:href': xlinkHref2,
-      xlinkHref,
-      ...rest
-    } = attributes;
-    const xHref = xlinkHref || xlinkHref2 || xlinkhref;
-    const clsName = className || cls;
-    const clsNames = clsName ? clsName.split(/\s+/).filter(x => x) : null;
+    const { id, className, xlinkHref, ...rest } = attributes;
+    const clsNames = className ? className.split(/\s+/).filter(x => x) : null;
     const clsMaxIdx = clsNames ? clsNames.length - 1 : 0;
     return (
       <span className="SvgNodeAttributes">
@@ -60,10 +50,10 @@ class SvgNodeAttributes extends React.Component<SvgNodeAttributesProps> {
         ) : (
           ''
         )}
-        {xHref ? (
+        {xlinkHref ? (
           <span className="SvgNodeAttribute SvgNodeAttribute-xlink-href">
             <span className="hidden-markup bottom">{' xlink:href="'}</span>
-            <span className="value">{xHref}</span>
+            <span className="value">{xlinkHref}</span>
             <span className="hidden-markup">{'"'}</span>
           </span>
         ) : (

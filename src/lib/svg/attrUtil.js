@@ -1,6 +1,6 @@
 // @flow
 
-import { type SvgAttributes } from '../svg/SvgElement';
+import { type SvgAttributes } from './SvgNode';
 
 import possibleStandardNames from './possibleStandardNames';
 

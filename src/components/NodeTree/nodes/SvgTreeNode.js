@@ -2,14 +2,13 @@
 
 import * as React from 'react';
 import cx from 'classnames';
-import { type SvgElement } from '../../../lib/svg/SvgElement';
-import { getIdForObject } from '../../../lib/getIdForObject';
+import { type SvgNode } from '../../../lib/svg/SvgNode';
 import SvgNodeAttributes from './SvgNodeAttributes';
 
 import './SvgTreeNode.css';
 
 type SvgTreeNodeProps = {
-  ...SvgElement,
+  ...SvgNode,
   inline?: boolean,
 };
 
@@ -33,8 +32,8 @@ class SvgTreeNode extends React.Component<SvgTreeNodeProps, SvgTreeNodeState> {
     const props: SvgTreeNodeProps = this.props;
     const { expanded } = this.state;
     const Wrapper = props.inline ? 'span' : 'div';
-    switch (props.type) {
-      case 'comment':
+    switch (props.__typename) {
+      case 'SvgComment':
         return (
           <Wrapper className="SvgTreeNode SvgTreeNode-comment">
             <span className="hidden-markup middle">{`<!--`}</span>
@@ -42,15 +41,17 @@ class SvgTreeNode extends React.Component<SvgTreeNodeProps, SvgTreeNodeState> {
             <span className="hidden-markup middle">{`-->`}</span>
           </Wrapper>
         );
-      case 'text':
+      case 'SvgText':
         return <Wrapper className="SvgTreeNode">{props.text || ''}</Wrapper>;
-      case 'element':
+      case 'SvgDocument':
+      case 'SvgElement':
         const elName = props.name || '';
-        const elements = props.elements;
-        const hasElements = elements && elements.length > 0;
-        const selfClosing = !elements || elements.length === 0;
-        const onlyElement = elements && elements.length === 1 && elements[0];
-        const onlyTextNode = onlyElement && onlyElement.type === 'text';
+        const childNodes = props.childNodes;
+        const hasElements = childNodes && childNodes.length > 0;
+        const selfClosing = !childNodes || childNodes.length === 0;
+        const onlyElement =
+          childNodes && childNodes.length === 1 && childNodes[0];
+        const onlyTextNode = onlyElement && onlyElement.__typename === 'text';
         const TagWrapper = expanded && !onlyTextNode ? 'div' : 'span';
         return (
           <Wrapper className="SvgTreeNode">
@@ -73,7 +74,9 @@ class SvgTreeNode extends React.Component<SvgTreeNodeProps, SvgTreeNodeState> {
                 <SvgTreeNode inline {...onlyElement} />
               ) : !expanded ? (
                 <span className="SvgTreeNode-collapsed-summary">
-                  {elements && elements.length ? `${elements.length}` : ''}
+                  {childNodes && childNodes.length
+                    ? `${childNodes.length}`
+                    : ''}
                 </span>
               ) : (
                 ''
@@ -83,9 +86,9 @@ class SvgTreeNode extends React.Component<SvgTreeNodeProps, SvgTreeNodeState> {
               ''
             ) : (
               <div className="SvgTreeNode-nodes">
-                {elements &&
-                  elements.map((el: SvgElement) => (
-                    <SvgTreeNode key={getIdForObject(el)} {...el} />
+                {childNodes &&
+                  childNodes.map((node: SvgNode) => (
+                    <SvgTreeNode key={node.id} {...node} />
                   ))}
                 <div className="SvgTreeNode-add" />
               </div>
@@ -98,7 +101,7 @@ class SvgTreeNode extends React.Component<SvgTreeNodeProps, SvgTreeNodeState> {
           </Wrapper>
         );
       default:
-        console.error(`Unknown SVG Node ${props.type || ''}`, props);
+        console.error(`Unknown SVG Node ${props.__typename || ''}`, props);
         return null;
     }
   }

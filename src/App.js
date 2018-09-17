@@ -32,8 +32,8 @@ class App extends Component {
               {data && data.dialogs && data.dialogs.openFile ? (
                 <OpenFileDialog />
               ) : null}
-              <Drawing root={sample.elements[0]} />
-              <NodeTree root={sample.elements[0]} />
+              <Drawing {...sample} />
+              <NodeTree {...sample} />
             </React.Fragment>
           )}
         </Query>
