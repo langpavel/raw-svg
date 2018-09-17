@@ -14,7 +14,9 @@ type OpenFileDialogProps = {
 
 type OpenFileDialogState = {
   error: ?Error,
-  svg: ?Document,
+  svgDocument: ?Document,
+  fileName: string,
+  lastModified: number,
 };
 
 class OpenFileDialog extends React.Component<
@@ -23,7 +25,9 @@ class OpenFileDialog extends React.Component<
 > {
   state = {
     error: null,
-    svg: null,
+    svgDocument: null,
+    fileName: null,
+    lastModified: null,
   };
 
   closeDialog = name => {
@@ -48,8 +52,12 @@ class OpenFileDialog extends React.Component<
         try {
           const svgSrc = e.target.result;
           const parser = new DOMParser();
-          const svg = parser.parseFromString(svgSrc, 'image/svg+xml');
-          this.setState({ svg });
+          const svgDocument = parser.parseFromString(svgSrc, 'image/svg+xml');
+          this.setState({
+            svgDocument,
+            fileName: file.name,
+            lastModified: file.lastModified,
+          });
         } catch (error) {
           this.setState({ error });
         }
@@ -61,51 +69,102 @@ class OpenFileDialog extends React.Component<
 
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { svg } = this.state;
-    if (svg) {
-      console.log('loadDocument', { svg });
-
+    const { fileName, lastModified, svgDocument } = this.state;
+    if (svgDocument) {
       const getAttributes = (node: DocumentNode) => {
         const result = {};
         for (let entry of node.attributes) {
-          console.log('entry', entry);
           result[entry.name] = entry.value;
         }
         return result;
+      };
+
+      const processNode = (node: DocumentNode) => {
+        // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#Node_type_constants
+        switch (node.nodeType) {
+          case 1: {
+            // ELEMENT_NODE
+            return {
+              __typename: 'SvgElement',
+              name: node.nodeName,
+              attributes: getAttributes(node),
+              childNodes: getChildNodes(node),
+            };
+          }
+          case 3: {
+            // TEXT_NODE
+            return {
+              __typename: 'SvgText',
+              text: node.nodeValue,
+            };
+          }
+          case 4: {
+            // CDATA_SECTION_NODE
+            return {
+              __typename: 'SvgCdata',
+              cdata: node.nodeValue,
+            };
+          }
+          case 7: {
+            // PROCESSING_INSTRUCTION_NODE
+            return {
+              __typename: 'SvgProcessingInstruction',
+              instruction: node.nodeValue,
+            };
+          }
+          case 8: {
+            // COMMENT_NODE
+            return {
+              __typename: 'SvgComment',
+              comment: node.nodeValue,
+            };
+          }
+          case 9: {
+            // DOCUMENT_NODE
+            return {
+              __typename: 'SvgDocument',
+              fileName,
+              lastModified,
+              childNodes: getChildNodes(node),
+            };
+          }
+          // case 10: // DOCUMENT_TYPE_NODE
+          // case 11: // DOCUMENT_FRAGMENT_NODE
+          default: {
+            console.error('Unhandled node type:', node.nodeType, node);
+            return null;
+          }
+        }
       };
 
       const getChildNodes = (parent: DocumentNode) => {
         const result = [];
         if (parent.childNodes.length === 0) return null;
         for (let node of parent.childNodes) {
-          result.push({});
+          const element = processNode(node);
+          if (element) result.push(element);
         }
+        if (result.length === 0) return null;
         return result;
       };
 
-      const root = {
-        type: 'element',
-        name: svg.documentElement.nodeName,
-        attributes: getAttributes(svg.documentElement),
-        elements: getChildNodes(svg.documentElement),
-      };
-
-      console.log('root', root);
+      const document = processNode(svgDocument);
+      console.log('SVG:', document);
 
       this.handleClose();
     }
   };
 
   render() {
-    const { error, svg } = this.state;
+    const { error, svgDocument } = this.state;
     return (
       <ModalDialog title="Open File" onClose={this.handleClose}>
         <form onSubmit={this.handleSubmit}>
-          {svg && svg.documentElement ? (
+          {svgDocument && svgDocument.documentElement ? (
             <div
               className="OpenDialog-preview"
               dangerouslySetInnerHTML={{
-                __html: (console.log({ svg }), svg.documentElement.outerHTML),
+                __html: svgDocument.documentElement.outerHTML,
               }}
             />
           ) : (
@@ -119,7 +178,7 @@ class OpenFileDialog extends React.Component<
               onChange={this.handleChange}
             />
             <button
-              disabled={!svg || error}
+              disabled={!svgDocument || error}
               className="OpenDialog-open"
               type="submit"
             >
