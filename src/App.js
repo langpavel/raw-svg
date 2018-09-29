@@ -8,15 +8,146 @@ import OpenFileDialog from './components/OpenFileDialog/OpenFileDialog';
 
 import './App.css';
 
-import sample from './samples/react-riot-can.json';
-
-const QUERY_DIALOGS = gql`
+const QUERY = gql`
   {
     dialogs @client {
       openFile
     }
     currentDocument @client {
-      documentElement
+      __typename
+      id
+      fileName
+      lastModified
+      childNodes {
+        __typename
+        id
+        ... on SvgText {
+          text
+        }
+        ... on SvgCData {
+          cdata
+        }
+        ... on SvgComment {
+          comment
+        }
+        ... on SvgProcessingInstruction {
+          name
+          content
+        }
+        ... on SvgElement {
+          name
+          attributes
+          childNodes {
+            __typename
+            id
+            ... on SvgText {
+              text
+            }
+            ... on SvgCData {
+              cdata
+            }
+            ... on SvgComment {
+              comment
+            }
+            ... on SvgProcessingInstruction {
+              name
+              content
+            }
+            ... on SvgElement {
+              name
+              attributes
+              childNodes {
+                __typename
+                id
+                ... on SvgText {
+                  text
+                }
+                ... on SvgCData {
+                  cdata
+                }
+                ... on SvgComment {
+                  comment
+                }
+                ... on SvgProcessingInstruction {
+                  name
+                  content
+                }
+                ... on SvgElement {
+                  name
+                  attributes
+                  childNodes {
+                    __typename
+                    id
+                    ... on SvgText {
+                      text
+                    }
+                    ... on SvgCData {
+                      cdata
+                    }
+                    ... on SvgComment {
+                      comment
+                    }
+                    ... on SvgProcessingInstruction {
+                      name
+                      content
+                    }
+                    ... on SvgElement {
+                      name
+                      attributes
+                      childNodes {
+                        __typename
+                        id
+                        ... on SvgText {
+                          text
+                        }
+                        ... on SvgCData {
+                          cdata
+                        }
+                        ... on SvgComment {
+                          comment
+                        }
+                        ... on SvgProcessingInstruction {
+                          name
+                          content
+                        }
+                        ... on SvgElement {
+                          name
+                          attributes
+                          childNodes {
+                            __typename
+                            id
+                            ... on SvgText {
+                              text
+                            }
+                            ... on SvgCData {
+                              cdata
+                            }
+                            ... on SvgComment {
+                              comment
+                            }
+                            ... on SvgProcessingInstruction {
+                              name
+                              content
+                            }
+                            ... on SvgElement {
+                              name
+                              attributes
+                              childNodes {
+                                __typename
+                                id
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -26,14 +157,18 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <Query query={QUERY_DIALOGS}>
+        <Query query={QUERY}>
           {({ data }) => (
             <React.Fragment>
               {data && data.dialogs && data.dialogs.openFile ? (
                 <OpenFileDialog />
               ) : null}
-              <Drawing {...sample} />
-              <NodeTree {...sample} />
+              {data && data.currentDocument ? (
+                <Drawing {...data.currentDocument} />
+              ) : null}
+              {data && data.currentDocument ? (
+                <NodeTree {...data.currentDocument} />
+              ) : null}
             </React.Fragment>
           )}
         </Query>
