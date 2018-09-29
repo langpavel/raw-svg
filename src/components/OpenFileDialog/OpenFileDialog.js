@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import { withApollo } from 'react-apollo';
 import { type ApolloClient } from 'apollo-client';
 import ModalDialog from '../ModalDialog/ModalDialog';
-import { convertSvgDom } from '../../lib/svg/convertSvgDom';
+import { loadSvgDOM } from '../../lib/svg/loadSvgDOM';
 import './OpenFileDialog.css';
 
 type OpenFileDialogProps = {
@@ -71,7 +71,14 @@ class OpenFileDialog extends React.Component<
     e.preventDefault();
     const { fileName, lastModified, svgDocument } = this.state;
     if (svgDocument) {
-      const document = convertSvgDom({ fileName, lastModified, svgDocument });
+      const cache = this.props.client.cache;
+      const document = loadSvgDOM({
+        fileName,
+        lastModified,
+        svgDocument,
+        cache,
+      });
+
       console.log('SVG:', document);
 
       this.handleClose();

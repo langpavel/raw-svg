@@ -1,11 +1,8 @@
 // @flow
 
+// import sample from './react-riot-can.json';
+
 const defaults = {
-  currentDrawing: {
-    __typename: 'CurrentDrawing',
-    name: null,
-    root: null,
-  },
   dialogs: {
     __typename: 'Dialogs',
     openFile: false,

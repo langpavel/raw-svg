@@ -1,6 +1,7 @@
 // @flow
 
 import { genSerial } from '../getIdForObject';
+import gql from 'graphql-tag';
 import { getReactAttrName } from './attrUtil';
 import { type SvgNode, type SvgAttributes } from './SvgNode';
 
@@ -12,7 +13,70 @@ function getAttributes(node: Element): SvgAttributes {
   return result;
 }
 
-function processNode(node: Node): ?SvgNode {
+const FRAGMENTS = gql`
+  fragment loadSvgText on SvgText {
+    __typename
+    id
+    text
+  }
+  fragment loadSvgCData on SvgCData {
+    __typename
+    id
+    cdata
+  }
+  fragment loadSvgComment on SvgComment {
+    __typename
+    id
+    comment
+  }
+  fragment loadSvgProcessingInstruction on SvgProcessingInstruction {
+    __typename
+    id
+    name
+    content
+  }
+  fragment loadSvgElement on SvgElement {
+    __typename
+    id
+    name
+    attributes
+    childNodes {
+      __typename
+      id
+    }
+  }
+  fragment loadSvgDocument on SvgDocument {
+    __typename
+    id
+    fileName
+    lastModified
+    childNodes {
+      __typename
+      id
+    }
+  }
+`;
+
+const QUERY_CURRENT_DOCUMENT = gql`
+  {
+    currentDocument {
+      __typename
+      id
+    }
+  }
+`;
+
+function loadNode(cache, element) {
+  if (!cache || !element) return;
+  cache.writeFragment({
+    id: `${element.__typename}:${element.id}`,
+    data: element,
+    fragment: FRAGMENTS,
+    fragmentName: `load${element.__typename}`,
+  });
+}
+
+function processNode(node: Node, cache: any): ?SvgNode {
   // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#Node_type_constants
   switch (node.nodeType) {
     case 1: {
@@ -23,7 +87,7 @@ function processNode(node: Node): ?SvgNode {
         name: node.nodeName,
         // $FlowFixMe
         attributes: getAttributes(node),
-        childNodes: getChildNodes(node),
+        childNodes: getChildNodes(node, cache),
       };
     }
     case 3: {
@@ -64,7 +128,7 @@ function processNode(node: Node): ?SvgNode {
       return {
         __typename: 'SvgDocument',
         id: genSerial(),
-        childNodes: getChildNodes(node),
+        childNodes: getChildNodes(node, cache),
       };
     }
     // case 10: // DOCUMENT_TYPE_NODE
@@ -76,12 +140,15 @@ function processNode(node: Node): ?SvgNode {
   }
 }
 
-function getChildNodes(parent: Node): Array<SvgNode> | null {
+function getChildNodes(parent: Node, cache: any): Array<SvgNode> | null {
   const result = [];
   if (parent.childNodes.length === 0) return null;
   for (let node of parent.childNodes) {
-    const element = processNode(node);
-    if (element) result.push(element);
+    const element = processNode(node, cache);
+    if (element) {
+      loadNode(cache, element);
+      result.push(element);
+    }
   }
   if (result.length === 0) return null;
   return result;
@@ -89,14 +156,22 @@ function getChildNodes(parent: Node): Array<SvgNode> | null {
 
 type ConvertSvgDomOptions = {
   svgDocument: Node,
+  cache: any,
   [name: string]: mixed,
 };
 
-export function convertSvgDom({
+export function loadSvgDOM({
   svgDocument,
+  cache,
   ...rest
 }: ConvertSvgDomOptions): SvgNode | null {
-  const document = processNode(svgDocument);
+  const document = processNode(svgDocument, cache);
   if (!document) return null;
-  return Object.assign(document, rest);
+  Object.assign(document, rest);
+  loadNode(cache, document);
+  cache.writeQuery({
+    data: { currentDocument: document },
+    query: QUERY_CURRENT_DOCUMENT,
+  });
+  return document;
 }
